@@ -1,0 +1,42 @@
+<!-- Navbar de Alunos -->
+<mat-toolbar class="topnav" id="navbar-student">
+  <button mat-icon-button (click)="navigate('home')">
+    <span class="material-icons">
+      home
+    </span>
+    Home
+  </button>
+
+  <div class="item-menu">
+
+    <span>
+      <button class="item" mat-button (click)="navigate('transactions')">
+        <span class="material-icons">
+          folder_open
+        </span>
+        <span class="text">Meus Envios</span>
+      </button>
+    </span>
+
+    <span>
+      <button class="item" mat-button (click)="navigate('user')">
+        <span class="material-icons">
+          alternate_email
+        </span>
+        <span class="text">Usuário</span>
+      </button>
+    </span>
+
+    <span>
+      <button class="item" mat-button (click)="logout()">
+        <span class="material-icons">
+          exit_to_app
+        </span>
+        <span class="text">Sair</span>
+      </button>
+    </span>
+
+
+  </div>
+
+</mat-toolbar>

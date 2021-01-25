@@ -1,0 +1,44 @@
+<div class="row h-100">
+    <div class="col-12">
+        <div class="center-vertically">
+            <div class="w-100 margin-auto">
+                <!-- Enquanto não houver arquivos -->
+                <div [hidden]="(file)">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="dropzone" appDnd (fileDropped)="onFileDropped($event)">
+                                <input type="file" #fileDropRef id="fileDropRef" [accept]="acceptFiles"
+                                    (change)="onFileDropped($event.target.files)" multiple="false">
+                                <h3>Arraste os seus dados aqui...</h3>
+                                <label for="fileDropRef" color="primary">Navegue e escolha</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quando um arquivo for carregado -->
+                <div [hidden]="!(file)">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="file-info-area">
+                                <img src="assets/ic-file.svg" width="45px" alt="file">
+                                <div class="info">
+                                    <h4 class="name">
+                                        {{ file?.name }}
+                                        &nbsp;
+                                    </h4>
+                                    <p class="size">
+                                        {{ formatBytes(file?.size) }}
+                                    </p>
+                                    <app-progress [progress]="progress"></app-progress>
+                                </div>
+                                <img src="assets/ic-delete-file.svg" class="delete" width="20px" alt="file"
+                                    (click)="onRemoveFile()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

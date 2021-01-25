@@ -1,0 +1,199 @@
+<app-create-helper [mainComponent]="this"></app-create-helper>
+
+<div class="row main-table">
+
+    <div class="col-md-12 col-sm-12">
+
+        <div class="table-responsive">
+            <table mat-table [dataSource]="_data" class="w-100">
+
+                <ng-container matColumnDef="icon">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="material-icons">
+                            attach_file
+                          </span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef> # </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span>
+                            {{element.id}}
+                        </span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Descrição do Envio </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span>
+                            {{element.name}}
+                        </span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="created_at">
+                    <th mat-header-cell *matHeaderCellDef> Data </th>
+                    <td mat-cell *matCellDef="let element">{{element.created_at | date:'dd/MM/yyyy HH:mm'}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="size">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef> Tamanho </th>
+                    <td class="text-center" mat-cell *matCellDef="let element">
+                        {{formatBytes(element.upload_object.size)}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="hash">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef> Hash </th>
+                    <td class="text-center" mat-cell *matCellDef="let element">
+                        <button mat-button (click)="showHash(element.upload_object.hash)">Mostrar Hash</button>
+                    </td>
+                </ng-container>
+          
+                <ng-container matColumnDef="actions">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef> </th>
+                    <td class="text-center" mat-cell *matCellDef="let element">
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="navigateTo(['transactions', 'edit', element.id])">
+                                <mat-icon>edit</mat-icon>
+                                Editar
+                            </button>
+                            <button mat-menu-item (click)="download(element.upload)">
+                                <mat-icon>cloud_download</mat-icon>
+                                Download
+                            </button>
+                            <button mat-menu-item (click)="delete(element.id)">
+                                <mat-icon>clear</mat-icon>
+                                Apagar
+                            </button>
+                        </mat-menu>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="_displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: _displayedColumns;"></tr>
+            </table>
+            <mat-paginator (page)="changeTablePage($event)" [length]="_total" [pageSize]="_data.length">
+            </mat-paginator>
+        </div>
+
+    </div>
+</div>
+
+
+<ng-template #informationsTemplate>
+    <mat-dialog-content>
+        <div class="row mb-32">
+            <div class="col-12">
+                <div class="float-right">
+                    <button mat-icon-button (click)="_notifications=null; closeCurrentDialogRef()">
+                        <mat-icon>
+                            clear
+                        </mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-32">
+            <div class="col-12">
+                <div class="center-vertically">
+                    <h5>1. Logs e Informações</h5>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-32">
+            <div class="col-12">
+
+                <div class="table-responsive">
+                    <table [hidden]="!(_notifications && _notifications.length)" mat-table [dataSource]="_notifications" class="w-100">
+
+                        <ng-container matColumnDef="icon">
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let element">
+                                <span>
+                                    <img width="30" src="../../../assets/bell.svg" alt="">
+                                </span>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="title">
+                            <th mat-header-cell *matHeaderCellDef> </th>
+                            <td mat-cell *matCellDef="let element">
+                                <p>
+                                    <b>{{element.title}}</b>
+                                </p>
+                                <p>
+                                    <small>
+                                        {{element.description}}
+                                    </small>
+                                </p>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="priority">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef> Prioridade </th>
+                            <td class="text-center" mat-cell *matCellDef="let element">
+                                <mat-icon
+                                    [ngClass]="{'text-success': element.priority === 1, 'text-warning': element.priority === 2, 'text-danger': element.priority === 3}">
+                                    fiber_manual_record
+                                </mat-icon>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="created_at">
+                            <th mat-header-cell *matHeaderCellDef> Data </th>
+                            <td mat-cell *matCellDef="let element">{{element.created_at | date:'dd/MM/yyyy HH:mm'}}</td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="_notificationsColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: _notificationsColumns;"></tr>
+                    </table>
+                    <h6 *ngIf="!(_notifications && _notifications.length)" class="text-center">
+                        Sem logs
+                    </h6>
+                </div>
+
+            </div>
+        </div>
+    </mat-dialog-content>
+</ng-template>
+
+<ng-template #editTemplate>
+    <mat-dialog-content>
+        <div class="row mb-32">
+            <div class="col-12">
+                <div class="float-right">
+                    <button mat-icon-button (click)="closeCurrentDialogRef()">
+                        <mat-icon>
+                            c
+                        </mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-32">
+            <div class="col-12">
+                <div class="center-vertically">
+                    <h5>1. Transação</h5>
+                    <textarea class="text-area-default" rows="5"
+                        placeholder="Ex. Primeiro envio da base para o Covid Tracker"
+                        [(ngModel)]="_target.name"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-32">
+            <div class="col-12">
+                <div class="text-center">
+                    <button mat-raised-button color="primary" class="send-button"
+                        (click)="edit(_target)">Salvar!</button>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+</ng-template>

@@ -1,0 +1,118 @@
+<div class="row mb-32 h-100">
+    <div class="col-12">
+
+        <div class="row mb-64">
+            <div class="col-md-4 col-sm-12">
+                <div class="p-10 h-100">
+                    <mat-card class="mat-elevation-z1 card-indicators h-100">
+                        <div class="row h-100">
+                            <div class="col-md-12">
+                                <div class="float-left">
+                                    <h6># TOTAL DE ENVIOS</h6>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="float-right">
+                                    <h1>{{_data.files ? _data.files : 0}}</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+                <div class="p-10">
+                    <mat-card class="mat-elevation-z1 card-indicators">
+                        <div class="row h-100">
+                            <div class="col-md-12">
+                                <div class="float-left">
+                                    <h6># TOTAL DE ENVIOS CHECADOS</h6>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="float-right">
+                                    <h1>{{_data.checks ? _data.checks : 0}}</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+                <div class="p-10">
+                    <mat-card class="mat-elevation-z1 card-indicators">
+                        <div class="row h-100">
+                            <div class="col-md-12">
+                                <div class="float-left">
+                                    <h6># TOTAL ESPAÇO UTILIZADO</h6>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="float-right">
+                                    <h1>{{_data.size ? formatBytes(_data.size) : 0}}</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row mb-32">
+            <div class="col-12">
+                <div class="p-10">
+                    <mat-card class="mat-elevation-z1">
+                        <div class="row">
+                            <div class="col-12">
+                                <h4>
+                                    Últimas verificações de arquivo
+                                </h4>
+                                <p>
+                                    <small>
+                                        Meus últimos arquivos que foram verificados
+                                    </small>
+                                </p>
+                            </div>
+                            <div class="col-12 mt-10">
+                                <table class="table table-borderless">
+                                    <tr *ngFor="let check of _data.last_checks">
+                                        <td class="icon-td">
+                                            <span class="material-icons">
+                                                {{check.match ? 'done' : 'clear'}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <h6>
+                                                Código: {{check.file_id}}
+                                            </h6>
+                                            <p>
+                                                <small>
+                                                    Hash: {{check.hash}}
+                                                </small>
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <h6>{{check.match ? 'Conferido com sucesso' : 'Conferido sem sucesso'}}</h6>
+                                        </td>
+                                        <td>
+                                            <h6>{{check.created_at | date: 'dd/MM hh:mm'}}</h6>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="!(_data.last_checks && _data.last_checks.length)">
+                                        <td>
+                                            Nenhum arquivo verificado recentemente
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

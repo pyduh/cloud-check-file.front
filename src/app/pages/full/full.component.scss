@@ -1,0 +1,20 @@
+.main {
+    background-color: #FCFBFB;
+    height: 100%;
+}
+
+.wrapper {
+    padding-top: 3rem;
+    padding-bottom: 3rem;    /* Footer height */
+    min-height: 100vh;
+
+    @media(min-width:768px){
+        width: 80%;
+    }  
+}
+
+.wrapper-navbar {
+    width: 90%;
+    padding-top: 1.5rem;
+    margin: auto;
+}

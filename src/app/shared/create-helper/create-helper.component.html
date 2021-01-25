@@ -1,0 +1,179 @@
+<div class="row mt-20">
+    <div class="col-md-12">
+        <mat-card *ngIf="!viewType" class="mat-elevation-z8">
+            <div class="row mb-32">
+                <div class="col-md-4 col-sm-6">
+                    <div class="float-left">
+
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <div class="text-center" *ngIf="mainComponent._moduleName">
+                        <h3>
+                            {{mainComponent._moduleName}}
+                        </h3>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <div class="float-right ">
+                        <button mat-icon-button color="primary" *ngIf="filter" (click)="openFilters=!openFilters">
+                            <mat-icon>filter_list</mat-icon>
+                        </button>
+                        &nbsp;
+                        <button mat-icon-button color="primary"  *ngIf="create" (click)="add()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="openFilters">
+                <div class="col-md-12 col-sm-12">
+                    <div class="row">
+
+                        <div class="col-12">
+
+                            <!-- Pesquisa Rápida -->
+                            <div class="row" *ngIf="!openAdvancedFilters">
+                                <div class="col-md-10 col-sm-6">
+                                    <mat-form-field class="w-100">
+                                        <mat-label>Pesquisa</mat-label>
+                                        <input matInput type="text" placeholder="Pesquisar por..." [(ngModel)]="_q">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-2 col-sm-6">
+                                    <button mat-icon-button (click)="clear()">
+                                        <mat-icon>clear</mat-icon>
+                                    </button>
+                                    <button mat-icon-button color="primary" (click)="search()">
+                                        <mat-icon>search</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- ./ Pesquisa Rápida -->
+
+                            <!-- Filtros Avançados -->
+                            <div class="row" *ngIf="filterColumns.length">
+                                <div class="col-md-12 col-sm-12" *ngIf="!openAdvancedFilters">
+                                    <button mat-stroked-button color="primary" class="w-100 center"
+                                        (click)="openAdvancedFilters=!openAdvancedFilters">Criar Filtro
+                                        Avançado</button>
+                                </div>
+
+                                <div class="col-md-12 col-sm-12" *ngIf="openAdvancedFilters">
+                                    <div class="row">
+                                        <div class="col-md-1 col-sm-3">
+                                            <mat-icon>ballot</mat-icon>
+                                        </div>
+
+                                        <div class="col-md-11 col-sm-12 mb-10">
+                                            <div class="row">
+
+                                                <!-- Atributo -->
+                                                <div class="col-md-3 col-sm-12">
+                                                    <mat-form-field class="w-100">
+                                                        <mat-label>Atributo</mat-label>
+                                                        <select matNativeControl required [(ngModel)]="_attr">
+                                                            <option *ngFor="let attributeSelected of filterColumns"
+                                                                [ngValue]="attributeSelected">
+                                                                {{ attributeSelected.value }}
+                                                            </option>
+                                                        </select>
+                                                    </mat-form-field>
+                                                </div>
+                                                <!-- ./ Atributo -->
+
+                                                <!-- Condição -->
+                                                <div class="col-md-3 col-sm-12">
+                                                    <mat-form-field class="w-100">
+                                                        <mat-label>Condição</mat-label>
+                                                        <select matNativeControl required [(ngModel)]="_condition">
+                                                            <option *ngFor="let c of filterConditions" [ngValue]="c">
+                                                                {{ c.value }}
+                                                            </option>
+                                                        </select>
+                                                    </mat-form-field>
+                                                </div>
+                                                <!-- ./ Condição -->
+
+                                                <!-- Valor -->
+                                                <div class="col-md-4 col-sm-12">
+                                                    <!-- Tipos de Entrada de Dados -->
+                                                    <div *ngIf="_attr && !_attr.type">
+                                                        <mat-form-field class="w-100">
+                                                            <mat-label>Valor</mat-label>
+                                                            <input matInput placeholder="Ex. Pizza" required
+                                                                [(ngModel)]="_value">
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div *ngIf="_attr && _attr.type">
+                                                        <!-- Input for Numeral -->
+                                                        <mat-form-field *ngIf="isNumber(_attr.type)" class="w-100">
+                                                            <mat-label>Valor</mat-label>
+                                                            <input type="number" matInput placeholder="Ex. 1, 2, 3"
+                                                                required [(ngModel)]="_value">
+                                                        </mat-form-field>
+                                                        <!-- Input for Booleano -->
+                                                        <mat-form-field *ngIf="isBoolean(_attr.type)" class="w-100">
+                                                            <mat-label>Condição</mat-label>
+                                                            <select matNativeControl required [(ngModel)]="_value">
+                                                                <option value="true">Verdadeiro!</option>
+                                                                <option value="false">Falso!</option>
+                                                            </select>
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                                <!-- Valor -->
+
+                                                <div class="col-md-2 col-sm-12 text-center">
+                                                    <button mat-icon-button color="warn" (click)="addFilter()"
+                                                        aria-label="Example icon button with a home icon">
+                                                        <mat-icon>add</mat-icon>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Área dos Filtros Atuais -->
+                                        <div class="col-md-11 offset-md-1 col-sm-12 mb-10">
+                                            <table class="table table-sm table-borderless">
+                                                <tr *ngFor="let filter of _filters; let i=index;">
+                                                    <td><span class="material-icons">
+                                                            arrow_right
+                                                        </span></td>
+                                                    <td>{{filter.__attribute__}} {{filter.__condition__}}
+                                                        <b>{{filter.value}}</b></td>
+                                                    <td class="cursor" (click)="removeFilter(i)"><small><b>Remover!</b></small></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <!-- Área dos Filtros Atuais -->
+
+                                        <!-- Área da Geração dos Filtros -->
+                                        <div class="col-md-12 col-sm-12 mb-10">
+                                            <button mat-stroked-button color="primary" [disabled]="!_filters.length" class="w-100 center"
+                                                (click)="searchAdvanced()">Fazer Busca!</button>
+                                        </div>
+                                        <!-- ./ Área da Geração dos Filtros -->
+
+                                        <!-- Fechar Filtro Avançado -->
+                                        <div class="col-md-12 col-sm-12 mb-10">
+                                            <button mat-stroked-button color="warn" class="w-100 center"
+                                                (click)="closeAdvancedFilters()">Fechar Filtro
+                                                Avançado</button>
+                                        </div>
+                                        <!-- ./ Fechar Filtro Avançado -->
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- ./ Filtros Avançados -->
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</div>

@@ -1,0 +1,224 @@
+<div class="main h-100">
+   <div class="container h-100">
+      <div class="row">
+         <div class="col-12">
+            <div class="float-md-right float-sm-center">
+               <div class="p-30">
+                  <button mat-button color="primary" (click)="changeArea()">
+                     <h3 class="text-center">{{this._loginArea ? 'Verificar arquivo': 'Fazer Login'}}</h3>
+                  </button>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="row align-items-center h-100">
+         <div class="col-md-6 col-sm-10 mx-auto">
+            <div [hidden]="_uploadArea">
+               <ng-container *ngTemplateOutlet="loginArea"></ng-container>
+            </div>
+            <div [hidden]="_loginArea">
+               <ng-container *ngTemplateOutlet="uploadArea"></ng-container>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<ng-template #loginArea>
+   <div *ngIf="_loginForm">
+      <ng-container *ngTemplateOutlet="loginForm"></ng-container>
+   </div>
+   <div *ngIf="_recoveryForm">
+      <ng-container *ngTemplateOutlet="recoveryForm"></ng-container>
+   </div>
+   <div *ngIf="_signupForm">
+      <ng-container *ngTemplateOutlet="signupForm"></ng-container>
+   </div>
+</ng-template>
+
+<ng-template #uploadArea>
+   <div class="row">
+      <div class="col-12 p-10">
+         <p>
+            <mat-form-field appearance="legacy" class="w-100">
+               <mat-label>Código</mat-label>
+               <input matInput type="text" [(ngModel)]="_object.id" placeholder="Entre com o código validador do arquivo">
+               <mat-icon matSuffix>attach_file</mat-icon>
+               <mat-hint>Entre com o código para validação do arquivo</mat-hint>
+            </mat-form-field>
+         </p>
+      </div>
+      <div class="col-12 p-10">
+         <app-upload #uploadRef></app-upload>
+      </div>
+      <div class="col-12 p-10" *ngIf="_result">
+         <h5>
+            Resultado: {{_result.match ? 'Confere!': 'Não Confere!'}}
+         </h5>
+         <p>
+            Hash: {{_result.hash}}
+         </p>
+      </div>
+      <div class="col-12 p-10">
+            <button mat-raised-button class="w-100" color="accent" (click)="verify()" [disabled]="!(_object.id && uploadRef.file)">Verificar</button>
+      </div>
+   </div>
+</ng-template>
+
+<ng-template #loginForm>
+   <div class="row">
+      <div class="col-12 p-10">
+         <div class="text-center">
+            <h3>Login</h3>
+         </div>
+      </div>
+      <div class="col-12 p-10">
+         <div class="row">
+            <div class="col-12">
+               <div class="float-right">
+                  <a href="javascript:void(0)" (click)="changeForm('_signupForm')">Novo?</a>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="col-12 p-10">
+         <p>
+            <mat-form-field appearance="legacy" class="w-100">
+               <mat-label>E-mail</mat-label>
+               <input matInput type="email" [(ngModel)]="_object.username" placeholder="Entre com seu e-mail">
+               <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+               <mat-hint>Email cadastrado</mat-hint>
+            </mat-form-field>
+         </p>
+      </div>
+      <div class="col-12 p-10">
+         <p>
+            <mat-form-field appearance="legacy" class="w-100">
+               <mat-label>Senha</mat-label>
+               <input matInput type="password" [(ngModel)]="_object.password" placeholder="Entre com sua senha">
+               <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+               <mat-hint>Senha cadastrada</mat-hint>
+            </mat-form-field>
+         </p>
+      </div>
+      <div class="col-12 p-10">
+         <div class="row">
+            <div class="col-md-6 col-sm-12">
+               <div class="float-left">
+                  <mat-checkbox class="example-margin" [(ngModel)]="_continueConnected">Continuar conectado</mat-checkbox>
+               </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+               <div class="float-right">
+                  <a href="javascript:void(0)" (click)="changeForm('_recoveryForm')">Esqueceu a senha?</a>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="col-12 p-10">
+         <button mat-raised-button class="w-100" color="accent" (click)="login()"
+            [disabled]="!(_object.username && _object.password)">Fazer Login</button>
+      </div>
+   </div>
+</ng-template>
+
+<ng-template #recoveryForm>
+   <div class="row">
+      <div class="col-12 p-10">
+         <div class="text-center">
+            <h3>Recuperar Senha</h3>
+         </div>
+      </div>
+      <div class="col-12 p-10">
+         <p>
+            <mat-form-field appearance="legacy" class="w-100">
+               <mat-label>E-mail</mat-label>
+               <input matInput type="email" [(ngModel)]="_object.username" placeholder="Entre com seu e-mail">
+               <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+               <mat-hint>Email cadastrado</mat-hint>
+            </mat-form-field>
+         </p>
+      </div>
+      <div class="col-12 p-10">
+         <button mat-raised-button class="w-100" color="accent" (click)="recovery()"
+            [disabled]="!(_object.username)">Recuperar</button>
+         <button mat-raised-button class="w-100" (click)="changeForm('_loginForm')">Voltar</button>
+      </div>
+
+   </div>
+</ng-template>
+
+<ng-template #signupForm>
+   <div class="row">
+      <div class="col-12 p-10">
+         <div class="text-center">
+            <h3>Signup</h3>
+         </div>
+      </div>
+      <div class="col-12 p-10">
+         <p>
+            <mat-form-field appearance="legacy" class="w-100">
+               <mat-label>E-mail</mat-label>
+               <input [(ngModel)]="_object.username" matInput type="email" placeholder="Entre com seu e-mail">
+               <mat-icon matSuffix>alternate_email</mat-icon>
+               <mat-hint>Email para cadastro</mat-hint>
+            </mat-form-field>
+         </p>
+      </div>
+      <div class="col-12 p-10">
+         <p>
+            <mat-form-field appearance="legacy" class="w-100">
+               <mat-label>Confirmar e-mail</mat-label>
+               <input [(ngModel)]="_object.confirm_username" matInput type="email" placeholder="Entre com seu e-mail">
+               <mat-icon matSuffix>alternate_email</mat-icon>
+               <mat-hint>Confirme seu e-mail para cadastrado</mat-hint>
+            </mat-form-field>
+         </p>
+      </div>
+      <div class="col-12 p-10">
+         <p>
+            <mat-form-field appearance="legacy" class="w-100">
+               <mat-label>Senha</mat-label>
+               <input [(ngModel)]="_object.password" matInput type="password" placeholder="Entre com sua senha">
+               <mat-icon matSuffix>lock</mat-icon>
+               <mat-hint>Senha para cadastro</mat-hint>
+            </mat-form-field>
+         </p>
+      </div>
+      <div class="col-12 p-10">
+         <p>
+            <mat-form-field appearance="legacy" class="w-100">
+               <mat-label>Confirme sua senha</mat-label>
+               <input [(ngModel)]="_object.confirm_password" matInput type="password" placeholder="Entre com sua senha">
+               <mat-icon matSuffix>lock</mat-icon>
+               <mat-hint>Confirme sua senha para cadastro</mat-hint>
+            </mat-form-field>
+         </p>
+      </div>
+      <div class="col-12 p-10">
+         <p>
+            <mat-form-field appearance="legacy" class="w-100">
+               <mat-label>Primeiro Nome</mat-label>
+               <input [(ngModel)]="_object.first_name" matInput type="text" placeholder="Entre com seu primeiro nome">
+               <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+               <mat-hint>Entre com seu primeiro nome</mat-hint>
+            </mat-form-field>
+         </p>
+      </div>
+      <div class="col-12 p-10">
+         <p>
+            <mat-form-field appearance="legacy" class="w-100">
+               <mat-label>Último Nome</mat-label>
+               <input [(ngModel)]="_object.last_name" matInput type="text" placeholder="Entre com seu último nome">
+               <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+               <mat-hint>Entre com seu último nome</mat-hint>
+            </mat-form-field>
+         </p>
+      </div>
+      <div class="col-12 p-10">
+         <button mat-raised-button class="w-100 mb-10" color="accent" (click)="signup()"
+            [disabled]="!((_object.username && _object.password && _object.first_name && _object.last_name) && (_object.username === _object.confirm_username) && (_object.password === _object.confirm_password))">Cadastrar</button>
+         <button mat-raised-button class="w-100" (click)="changeForm('_loginForm')">Voltar</button>
+      </div>
+   </div>
+</ng-template>

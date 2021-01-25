@@ -1,0 +1,95 @@
+a {
+  cursor: pointer;
+}
+
+.navbar {
+  justify-content: space-between;
+  background-color: green($color: #000000);
+}
+
+#navbar-student {
+  justify-content: space-between;
+  border-radius: 40px;
+  background-color: green($color: #000000) !important;
+}
+
+#navbar-teacher {
+  justify-content: space-between;
+  border-radius: 40px;
+  background-color: green($color: #000000) !important;
+}
+
+span {
+  padding-right: 1rem;
+}
+
+mat-icon {
+  margin-right: 0.5rem;
+}
+
+.material-icons {
+  font-size: 30px;
+}
+
+button img {
+  height: 150%;
+}
+
+.transparent {
+  background-color: transparent !important;
+}
+
+/******
+responsivo
+***********/
+.topnav {
+  overflow: hidden;
+}
+
+@media screen and (max-width: 430px) {
+  .topnav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    height: auto;
+    // position: relative;
+  }
+
+  .topnav button {
+    width: auto;
+    margin: 0 auto;
+    line-height: 10px;
+  }
+
+  .topnav .item-menu {
+    margin: 10px auto;
+  }
+
+  span.text {
+    display: none;
+  }
+
+  span {
+    padding: 0;
+  }
+
+  mat-icon {
+    margin: 0;
+  }
+}
+
+@media screen and (max-width: 830px) {
+  span.text {
+    display: none;
+  }
+
+  span {
+    padding: 0;
+  }
+
+  mat-icon {
+    margin: 0;
+  }
+}

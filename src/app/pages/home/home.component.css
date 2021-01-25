@@ -1,0 +1,29 @@
+.home-img {
+    height: 42px;
+}
+
+
+#right-side > * {
+    margin-bottom: 50px;
+}
+
+
+.mat-column-play {
+    width: 5%;
+}
+
+
+.mat-column-description {
+    width: 95%;
+    padding: 5%;
+}
+
+.mat-column-options {
+    width: 5%;
+}
+
+
+.mat-card {
+    padding: 24px 24px 0px 24px !important;
+}
+

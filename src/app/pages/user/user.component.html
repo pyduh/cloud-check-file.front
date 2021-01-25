@@ -1,0 +1,124 @@
+<div class="row mb-32 h-100">
+    <div class="col-12">
+        <div class="p-10">
+            <mat-expansion-panel class="mat-elevation-z1">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Redefinir Dados Pessoais
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="row">
+                    <div class="col-12">
+                        <p>
+                            <mat-form-field appearance="legacy" class="w-100">
+                                <mat-label>E-mail</mat-label>
+                                <input [(ngModel)]="_object.username" matInput type="email"
+                                    placeholder="Entre com seu e-mail">
+                                <mat-icon matSuffix>alternate_email</mat-icon>
+                                <mat-hint>Email cadastrado</mat-hint>
+                            </mat-form-field>
+                        </p>
+                    </div>
+                    <div class="col-12">
+                        <p>
+                            <mat-form-field appearance="legacy" class="w-100">
+                                <mat-label>Primeiro Nome</mat-label>
+                                <input [(ngModel)]="_object.first_name" matInput type="text"
+                                    placeholder="Entre com seu primeiro nome">
+                                <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                                <mat-hint>Primeiro nome cadastrado</mat-hint>
+                            </mat-form-field>
+                        </p>
+                    </div>
+                    <div class="col-12">
+                        <p>
+                            <mat-form-field appearance="legacy" class="w-100">
+                                <mat-label>Último Nome</mat-label>
+                                <input [(ngModel)]="_object.last_name" matInput type="text"
+                                    placeholder="Entre com seu último nome">
+                                <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                                <mat-hint>Último nome cadastrado</mat-hint>
+                            </mat-form-field>
+                        </p>
+                    </div>
+                    <div class="col-12">
+                        <button mat-raised-button class="w-100" color="accent" (click)="saveUser()"
+                            [disabled]="!((_object.username && _object.first_name && _object.last_name))">Redefinir
+                            Dados Pessoais</button>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="p-10">
+            <mat-expansion-panel class="mat-elevation-z1">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Redefinir Senha
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="row">
+                    <div class="col-12">
+                        <p>
+                            <mat-form-field appearance="legacy" class="w-100">
+                                <mat-label>Senha Atual</mat-label>
+                                <input [(ngModel)]="_object.password" matInput type="password"
+                                    placeholder="Entre com sua senha">
+                                <mat-icon matSuffix>lock</mat-icon>
+                                <mat-hint>Sua senha atual</mat-hint>
+                            </mat-form-field>
+                        </p>
+                    </div>
+                    <div class="col-12">
+                        <p>
+                            <mat-form-field appearance="legacy" class="w-100">
+                                <mat-label>Nova Senha</mat-label>
+                                <input [(ngModel)]="_object.new_password" matInput type="password"
+                                    placeholder="Entre com a nova senha">
+                                <mat-icon matSuffix>lock</mat-icon>
+                                <mat-hint>Nova senha para cadastro</mat-hint>
+                            </mat-form-field>
+                        </p>
+                    </div>
+                    <div class="col-12">
+                        <p>
+                            <mat-form-field appearance="legacy" class="w-100">
+                                <mat-label>Senha</mat-label>
+                                <input [(ngModel)]="_object.confirm_new_password" matInput type="password"
+                                    placeholder="Confirme sua nova senha">
+                                <mat-icon matSuffix>lock</mat-icon>
+                                <mat-hint>Confirme sua nova senha para cadastro</mat-hint>
+                            </mat-form-field>
+                        </p>
+                    </div>
+                    <div class="col-12">
+                        <button mat-raised-button class="w-100" color="accent" (click)="savePassword()"
+                            [disabled]="!((_object.password && _object.new_password && _object.confirm_new_password) && (_object.new_password === _object.confirm_new_password))">Redefinir
+                            Senha</button>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </div>
+
+    </div>
+
+    <div class="col-12">
+        <div class="p-10">
+            <mat-expansion-panel class="mat-elevation-z1">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Encerrar Conta
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="row">
+                    <div class="col-12">
+                        <button mat-raised-button class="w-100" color="accent" (click)="deleteUser()">Encerrar Conta</button>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </div>
+
+    </div>
+</div>

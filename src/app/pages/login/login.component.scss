@@ -1,0 +1,27 @@
+body {
+    background-image: none !important;
+}
+
+.main {
+    
+}
+
+li {
+    cursor: pointer;
+}
+
+mat-card-content > .row .col-12 {
+    padding: 2vh 10% 1vh 10%;
+}
+
+mat-card-content > .row .col-12 button {
+    margin-top: 5%;
+}
+
+mat-card-content button {
+    border-radius: 30px;
+}
+
+mat-card {
+   border-radius: 10%; 
+}

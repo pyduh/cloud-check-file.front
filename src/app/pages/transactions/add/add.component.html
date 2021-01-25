@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col-12">
+        <p>
+            <mat-form-field appearance="legacy" class="w-100">
+                <mat-label>Descrição do Envio</mat-label>
+                <input matInput type="text" [(ngModel)]="_object.name" placeholder="Entre com o nome do arquivo">
+                <mat-icon matSuffix>attach_file</mat-icon>
+                <mat-hint>Entre com a descrição do envio</mat-hint>
+            </mat-form-field>
+        </p>
+    </div>
+    <!-- Edição -->
+    <div class="col-12" *ngIf="isEdit">
+        <div class="row">
+            <div class="col-12 p-10">
+                <button mat-raised-button class="w-100" (click)="uploadArea=!uploadArea">
+                    Trocar Arquivo
+                </button>
+            </div>
+            <div class="col-12 p-10" [hidden]="uploadArea">
+                <app-upload #uploadRef></app-upload>
+            </div>
+            <div class="col-12 p-10">
+                <button mat-raised-button class="w-100" color="accent" (click)="editFile()">Salvar</button>
+            </div>
+        </div>
+    </div>
+    <!-- Create -->
+    <div class="col-12" *ngIf="!isEdit">
+        <div class="row">
+            <div class="col-12 p-10">
+                <app-upload #uploadRef></app-upload>
+            </div>
+            <div class="col-12 p-10">
+                <button mat-raised-button class="w-100" color="accent" (click)="saveFile()" [disabled]="!(_object.name && uploadRef.file)">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
