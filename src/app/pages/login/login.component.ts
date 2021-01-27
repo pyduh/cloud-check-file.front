@@ -17,29 +17,30 @@ export class LoginComponent extends DefaultComponent implements OnInit {
   @ViewChild('uploadRef') uploadRef: any;
   _apiView: string;
 
-  _loginArea:boolean = true
-  _uploadArea:boolean = false
+  _loginArea: boolean = true
+  _uploadArea: boolean = false
 
-  _loginForm:boolean = true
-  _recoveryForm:boolean = false
-  _signupForm:boolean = false
+  _loginForm: boolean = true
+  _recoveryForm: boolean = false
+  _signupForm: boolean = false
 
-  _continueConnected:boolean = true
+  _continueConnected: boolean = true
 
-  _result:any = null
-  _options:Array<any> = []
+  _result: any = null
+  _options: Array<any> = []
+  _strongPasswordRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\'!@#\$%\^&\*])(?=.{8,})");
 
 
   constructor(
     public _router: Router,
-    public _location:Location,
+    public _location: Location,
     public _service: DomainServices,
-    public _storage: StorageService) { 
-      super();
+    public _storage: StorageService) {
+    super();
 
-      this._storage.removeLocalStorage()
+    this._storage.removeLocalStorage()
   }
-  
+
   ngOnInit(): void {
   }
 
@@ -51,7 +52,7 @@ export class LoginComponent extends DefaultComponent implements OnInit {
   }
 
 
-  changeForm(targetForm:string) { 
+  changeForm(targetForm: string) {
     this[targetForm] = true
 
     Object.keys(this).filter(element => element.includes('Form')).filter(element => element != targetForm).forEach(element => this[element] = false)
@@ -60,26 +61,26 @@ export class LoginComponent extends DefaultComponent implements OnInit {
   }
 
 
-  async login() { 
+  async login() {
     this.showLoading()
 
     try {
       await this._service.login(this._object, 'auth/login/', this._continueConnected)
-      this.navigateTo(['home'])          
+      this.navigateTo(['home'])
     }
     finally {
       this.hideLoading()
     }
-    
+
   }
 
- 
+
   async recovery() {
     this.showLoading()
 
     try {
       await this._service.post().setModule('auth/forget-password/').setBodyParams(this._object).process_request(true, false, "A nova senha será enviada para o e-mail cadastrado!")
-            
+
       this.changeForm('_loginForm')
 
     } catch (error) {
@@ -112,28 +113,46 @@ export class LoginComponent extends DefaultComponent implements OnInit {
     formData.append('file', this.uploadRef.file, this.uploadRef.file.name);
     formData.append('id', this._object.id);
 
-    const observable = this._service.upload(formData, {apiModule:'files/verify/', authenticate:false})
+    const observable = this._service.upload(formData, { apiModule: 'files/verify/', authenticate: false })
 
     observable.subscribe(
       (event) => {
-          if (event.type === HttpEventType.UploadProgress)
-              this.uploadRef.progress  = Math.round(100 * event.loaded / event.total);
+        if (event.type === HttpEventType.UploadProgress)
+          this.uploadRef.progress = Math.round(100 * event.loaded / event.total);
 
-          else if (event instanceof HttpResponse) {
-            this.showResult(event.body)
-          }
+        else if (event instanceof HttpResponse) {
+          this.showResult(event.body)
+        }
 
       },
       (err) => {
-          console.error(err)
-          this.uploadRef.progress = 0
+        console.error(err)
+        this.uploadRef.progress = 0
       }
     )
   }
-  
+
 
   showResult(requestBody) {
     this._result = requestBody
+  }
+
+
+  isStrongPassword() {
+    let isStrong = true
+
+    if (this._object.password && !this._object.password.length) isStrong = false
+
+    if (!this._strongPasswordRegex.test(this._object.password)) isStrong = false
+
+    return isStrong
+  }
+
+
+  reset() {
+    this.uploadRef.reset()
+    this._object.id = ""
+    this._result = null
   }
 
 }

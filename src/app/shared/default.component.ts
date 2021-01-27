@@ -148,12 +148,6 @@ export abstract class DefaultComponent {
     }
 
 
-    getNewId(): string {
-        return String(uuid.v1())
-    }
-
-
-
     checkAll(targetArray: Array<any>, checkAttr: string = '_allChecked', modelAttr: string = 'checked', exceptsAttr: string = null) {
         console.debug("checkAll()", targetArray.length)
 

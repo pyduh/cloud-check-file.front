@@ -12,15 +12,6 @@
                     <td mat-cell *matCellDef="let element">
                         <span class="material-icons">
                             attach_file
-                          </span>
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="id">
-                    <th mat-header-cell *matHeaderCellDef> # </th>
-                    <td mat-cell *matCellDef="let element">
-                        <span>
-                            {{element.id}}
                         </span>
                     </td>
                 </ng-container>
@@ -46,13 +37,36 @@
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="hash">
-                    <th class="text-center" mat-header-cell *matHeaderCellDef> Hash </th>
+                <ng-container matColumnDef="checks">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef> Verificações </th>
                     <td class="text-center" mat-cell *matCellDef="let element">
-                        <button mat-button (click)="showHash(element.upload_object.hash)">Mostrar Hash</button>
+                        {{element.checks.length}}
                     </td>
                 </ng-container>
-          
+
+                <ng-container matColumnDef="id">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef></th>
+                    <td class="text-center" mat-cell *matCellDef="let element">
+                        <button mat-button color="primary" (click)="showHash(element.upload_object.hash)">
+                            <span class="material-icons">
+                                fingerprint
+                            </span>
+                            Hash
+                        </button>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="hash">
+                    <th class="text-center" mat-header-cell *matHeaderCellDef></th>
+                    <td class="text-center" mat-cell *matCellDef="let element">
+                        <button mat-button color="acent" (click)="showHash(element.id)">
+                            <span class="material-icons">
+                                verified_user
+                            </span>
+                            Código</button>
+                    </td>
+                </ng-container>
+
                 <ng-container matColumnDef="actions">
                     <th class="text-center" mat-header-cell *matHeaderCellDef> </th>
                     <td class="text-center" mat-cell *matCellDef="let element">
@@ -67,6 +81,10 @@
                             <button mat-menu-item (click)="download(element.upload)">
                                 <mat-icon>cloud_download</mat-icon>
                                 Download
+                            </button>
+                            <button mat-menu-item [disabled]="!element.checks.length" (click)="openChecks(element.checks)">
+                                <mat-icon>notifications_active</mat-icon>
+                                Verificações
                             </button>
                             <button mat-menu-item (click)="delete(element.id)">
                                 <mat-icon>clear</mat-icon>
@@ -87,12 +105,12 @@
 </div>
 
 
-<ng-template #informationsTemplate>
+<ng-template #checksTemplate>
     <mat-dialog-content>
         <div class="row mb-32">
             <div class="col-12">
                 <div class="float-right">
-                    <button mat-icon-button (click)="_notifications=null; closeCurrentDialogRef()">
+                    <button mat-icon-button (click)="closeCurrentDialogRef()">
                         <mat-icon>
                             clear
                         </mat-icon>
@@ -102,96 +120,40 @@
         </div>
         <div class="row mb-32">
             <div class="col-12">
-                <div class="center-vertically">
-                    <h5>1. Logs e Informações</h5>
-                </div>
+                <h4>
+                    Últimas verificações
+                </h4>
+                <p></p>
             </div>
         </div>
         <div class="row mb-32">
             <div class="col-12">
-
                 <div class="table-responsive">
-                    <table [hidden]="!(_notifications && _notifications.length)" mat-table [dataSource]="_notifications" class="w-100">
-
-                        <ng-container matColumnDef="icon">
-                            <th mat-header-cell *matHeaderCellDef></th>
-                            <td mat-cell *matCellDef="let element">
-                                <span>
-                                    <img width="30" src="../../../assets/bell.svg" alt="">
+                    <table class="table table-borderless">
+                        <tr *ngFor="let check of _checks">
+                            <td class="icon-td">
+                                <span class="material-icons">
+                                    {{check.match ? 'done' : 'clear'}}
                                 </span>
                             </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="title">
-                            <th mat-header-cell *matHeaderCellDef> </th>
-                            <td mat-cell *matCellDef="let element">
-                                <p>
-                                    <b>{{element.title}}</b>
-                                </p>
+                            <td>
+                                <h6>
+                                    Código: {{check.file_id}}
+                                </h6>
                                 <p>
                                     <small>
-                                        {{element.description}}
+                                        Hash: {{check.hash}}
                                     </small>
                                 </p>
                             </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="priority">
-                            <th class="text-center" mat-header-cell *matHeaderCellDef> Prioridade </th>
-                            <td class="text-center" mat-cell *matCellDef="let element">
-                                <mat-icon
-                                    [ngClass]="{'text-success': element.priority === 1, 'text-warning': element.priority === 2, 'text-danger': element.priority === 3}">
-                                    fiber_manual_record
-                                </mat-icon>
+                            <td>
+                                <p>{{check.match ? 'Conferido com sucesso' : 'Conferido sem sucesso'}}</p>
                             </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="created_at">
-                            <th mat-header-cell *matHeaderCellDef> Data </th>
-                            <td mat-cell *matCellDef="let element">{{element.created_at | date:'dd/MM/yyyy HH:mm'}}</td>
-                        </ng-container>
-
-                        <tr mat-header-row *matHeaderRowDef="_notificationsColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: _notificationsColumns;"></tr>
+                            <td>
+                                <p>{{check.created_at | date: 'dd/MM hh:mm'}}</p>
+                            </td>
+                        </tr>
                     </table>
-                    <h6 *ngIf="!(_notifications && _notifications.length)" class="text-center">
-                        Sem logs
-                    </h6>
-                </div>
-
-            </div>
-        </div>
-    </mat-dialog-content>
-</ng-template>
-
-<ng-template #editTemplate>
-    <mat-dialog-content>
-        <div class="row mb-32">
-            <div class="col-12">
-                <div class="float-right">
-                    <button mat-icon-button (click)="closeCurrentDialogRef()">
-                        <mat-icon>
-                            c
-                        </mat-icon>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="row mb-32">
-            <div class="col-12">
-                <div class="center-vertically">
-                    <h5>1. Transação</h5>
-                    <textarea class="text-area-default" rows="5"
-                        placeholder="Ex. Primeiro envio da base para o Covid Tracker"
-                        [(ngModel)]="_target.name"></textarea>
-                </div>
-            </div>
-        </div>
-        <div class="row mb-32">
-            <div class="col-12">
-                <div class="text-center">
-                    <button mat-raised-button color="primary" class="send-button"
-                        (click)="edit(_target)">Salvar!</button>
                 </div>
             </div>
         </div>

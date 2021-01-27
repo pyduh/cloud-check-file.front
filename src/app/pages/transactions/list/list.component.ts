@@ -18,11 +18,9 @@ const clonedeep = require('lodash.clonedeep')
   styleUrls: ['./list.component.css']
 })
 export class ListComponent extends DefaultComponent implements OnInit {
-  @ViewChild('editTemplate') _editTemplate: TemplateRef<any>
-  @ViewChild('informationsTemplate') _informationsTemplate: TemplateRef<any>
+  @ViewChild('checksTemplate') checksTemplate: TemplateRef<any>
   
-  _target:      any
-  _notifications: any[]
+  _checks: any[] // Dados de checagem. Será definido com um click na tabela
 
   _location:    Location
   _apiView:     string = 'files'
@@ -31,7 +29,7 @@ export class ListComponent extends DefaultComponent implements OnInit {
   _order_attr:  string = 'created_at'
   _order:       string = 'desc'
 
-  _displayedColumns = ['icon', 'id', 'name', 'created_at', 'size', 'hash', 'actions']
+  _displayedColumns = ['icon', 'name', 'created_at', 'size', 'checks', 'id', 'hash', 'actions']
   
   constructor(
     public _router: Router,
@@ -54,5 +52,9 @@ export class ListComponent extends DefaultComponent implements OnInit {
     this._snackBar.open(message, 'Fechar', {duration: 5000});
   }
   
+  openChecks(data:Array<any>) {
+    this._checks = data
+    this.openDialog(this._dialog, this.checksTemplate)
+  }
 
 }

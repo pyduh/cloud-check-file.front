@@ -2,12 +2,8 @@ body {
     background-image: none !important;
 }
 
-.main {
-    
-}
-
-li {
-    cursor: pointer;
+.mat-form-field-underline {
+    background-color: green;
 }
 
 mat-card-content > .row .col-12 {
@@ -25,3 +21,4 @@ mat-card-content button {
 mat-card {
    border-radius: 10%; 
 }
+

@@ -83,13 +83,16 @@ export class AddComponent extends DefaultComponent implements OnInit {
 
 
   async saveFile() {
-  
+    this.showLoading()
+
     this.uploadFile(async (data) => {
       data['name'] = this._object.name
       await this._service.post().setModule('files/').setBodyParams(data).process_request(true, true, "Arquivo criado com sucesso!")
       this.uploadRef.reset()
       this._object = {}
-    })    
+      this.hideLoading()
+    })
+
   }
 
 
@@ -99,11 +102,14 @@ export class AddComponent extends DefaultComponent implements OnInit {
       return
     }
 
+    this.showLoading()
+
     this.uploadFile(async (data) => {
       data['name'] = this._object.name
       await this._service.put().setModule(`files/${this.getCurrentId()}/`).setBodyParams(data).process_request(true, true, "Arquivo atualizado com sucesso!")
       this.uploadRef.reset()
       this._object = {}
+      this.hideLoading()
     }) 
         
   }

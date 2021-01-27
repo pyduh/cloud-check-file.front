@@ -5,7 +5,9 @@
             <div class="float-md-right float-sm-center">
                <div class="p-30">
                   <button mat-button color="primary" (click)="changeArea()">
-                     <h3 class="text-center">{{this._loginArea ? 'Verificar arquivo': 'Fazer Login'}}</h3>
+                     <h3 class="text-center">
+                        <span class="material-icons">fingerprint</span>
+                        {{this._loginArea ? 'Verificar arquivo': 'Fazer Login'}}</h3>
                   </button>
                </div>
             </div>
@@ -60,7 +62,9 @@
          </p>
       </div>
       <div class="col-12 p-10">
-            <button mat-raised-button class="w-100" color="accent" (click)="verify()" [disabled]="!(_object.id && uploadRef.file)">Verificar</button>
+            <button mat-raised-button class="w-100 mb-10" color="accent" (click)="verify()" [disabled]="!(_object.id && uploadRef.file)">Verificar</button>
+            <button mat-raised-button class="w-100 mb-10" (click)="reset()">Redefinir</button>
+            <button mat-raised-button class="w-100" (click)="changeArea();changeForm('_loginForm')">Voltar</button>
       </div>
    </div>
 </ng-template>
@@ -86,7 +90,7 @@
             <mat-form-field appearance="legacy" class="w-100">
                <mat-label>E-mail</mat-label>
                <input matInput type="email" [(ngModel)]="_object.username" placeholder="Entre com seu e-mail">
-               <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+               <mat-icon matSuffix>alternate_email</mat-icon>
                <mat-hint>Email cadastrado</mat-hint>
             </mat-form-field>
          </p>
@@ -96,7 +100,7 @@
             <mat-form-field appearance="legacy" class="w-100">
                <mat-label>Senha</mat-label>
                <input matInput type="password" [(ngModel)]="_object.password" placeholder="Entre com sua senha">
-               <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+               <mat-icon matSuffix>lock</mat-icon>
                <mat-hint>Senha cadastrada</mat-hint>
             </mat-form-field>
          </p>
@@ -110,7 +114,7 @@
             </div>
             <div class="col-md-6 col-sm-12">
                <div class="float-right">
-                  <a href="javascript:void(0)" (click)="changeForm('_recoveryForm')">Esqueceu a senha?</a>
+                  <!--<a href="javascript:void(0)" (click)="changeForm('_recoveryForm')">Esqueceu a senha?</a>-->
                </div>
             </div>
          </div>
@@ -180,8 +184,8 @@
             <mat-form-field appearance="legacy" class="w-100">
                <mat-label>Senha</mat-label>
                <input [(ngModel)]="_object.password" matInput type="password" placeholder="Entre com sua senha">
-               <mat-icon matSuffix>lock</mat-icon>
-               <mat-hint>Senha para cadastro</mat-hint>
+               <mat-icon matSuffix>{{isStrongPassword() ? 'done' : 'clear'}}</mat-icon>
+               <mat-hint>Senha para cadastro. <b>Ela deve ter pelo menos 8 caracteres, um maiúsculo, um minúsculo, um numeral e um caractere especial</b></mat-hint>
             </mat-form-field>
          </p>
       </div>
@@ -190,7 +194,7 @@
             <mat-form-field appearance="legacy" class="w-100">
                <mat-label>Confirme sua senha</mat-label>
                <input [(ngModel)]="_object.confirm_password" matInput type="password" placeholder="Entre com sua senha">
-               <mat-icon matSuffix>lock</mat-icon>
+               <mat-icon matSuffix>{{(isStrongPassword() && _object.confirm_password ===  _object.password)? 'done_all' : 'clear'}}</mat-icon>
                <mat-hint>Confirme sua senha para cadastro</mat-hint>
             </mat-form-field>
          </p>
@@ -217,7 +221,7 @@
       </div>
       <div class="col-12 p-10">
          <button mat-raised-button class="w-100 mb-10" color="accent" (click)="signup()"
-            [disabled]="!((_object.username && _object.password && _object.first_name && _object.last_name) && (_object.username === _object.confirm_username) && (_object.password === _object.confirm_password))">Cadastrar</button>
+            [disabled]="!((_object.username && _object.password && _object.first_name && _object.last_name) && (_object.username === _object.confirm_username) && (_object.password === _object.confirm_password) && (isStrongPassword()))">Cadastrar</button>
          <button mat-raised-button class="w-100" (click)="changeForm('_loginForm')">Voltar</button>
       </div>
    </div>
