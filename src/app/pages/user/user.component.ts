@@ -8,6 +8,7 @@ import { StorageService } from 'src/app/services/storage.services';
 import { Location } from '@angular/common';
 
 import { DefaultComponent } from 'src/app/shared/default.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -19,6 +20,8 @@ export class UserComponent extends DefaultComponent implements OnInit {
   _location: Location
 
   _apiView: string
+  _isInvited: boolean
+  _displayedColumns = ['icon', 'user', 'created_at', 'code', 'actions']
   
 
   constructor(
@@ -27,10 +30,12 @@ export class UserComponent extends DefaultComponent implements OnInit {
     public _toast: ToastrService,
     public _loading: NgxSpinnerService,
     public _dialog: MatDialog,
-    private _storage: StorageService
+    private _storage: StorageService,
+    public _snackBar: MatSnackBar
   ) {
     super()
     this._apiView = `auth/users/${this._storage.getMyApplicationId()}`
+    this._isInvited = this._storage.isInvited()
   }
 
 
@@ -72,6 +77,27 @@ export class UserComponent extends DefaultComponent implements OnInit {
     await this._service.setModule(`auth/users/${this._storage.getMyApplicationId()}/`).delete().process_request(false, false)
     this._storage.removeLocalStorage();
     this._router.navigate(["login"]);
+  }
+
+
+  async createInvite() {
+    if (!confirm('Tem certeza que deseja realizar essa ação?')) return
+    await this._service.setModule(`auth/invites/`).post().process_request(false, false)
+    this.listInitData()
+  }
+
+
+  async deleteInvite(invite) {
+    if (!confirm('Tem certeza que deseja realizar essa ação?')) return
+    await this._delete(invite.id, 'auth/invites')
+    this.listInitData()
+  }
+
+
+  generateLink(invite) {
+    let link = `${window.location.href.split('/user')[0]}/signup/${invite.id}` 
+    this.copyToClipboard(link)
+    this.showSnackBar('Convite copiado!')
   }
 
   

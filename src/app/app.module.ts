@@ -30,6 +30,8 @@ import { UserComponent } from './pages/user/user.component';
 
 import { ListComponent as TransactionList } from './pages/transactions/list/list.component'
 import { AddComponent as TransactionAdd } from './pages/transactions/add/add.component'
+import { FullPublicComponent } from './pages/full-public/full-public.component';
+import { SignupComponent } from './pages/signup/signup.component';
 
 
 @NgModule({
@@ -42,7 +44,9 @@ import { AddComponent as TransactionAdd } from './pages/transactions/add/add.com
     InitialsIconComponent, 
     NavbarComponent,
     LoginComponent,
+    SignupComponent,
     FullComponent,
+    FullPublicComponent,
     FooterComponent,
     HomeComponent,
     UserComponent,

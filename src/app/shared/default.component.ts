@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { HostListener, TemplateRef } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 const type_of_events = ['change_enterprise', 'login', 'logout']
@@ -26,6 +27,7 @@ export abstract class DefaultComponent {
     public _defaultDialog: any
     public _dialogRef: any;
     public _loading: NgxSpinnerService = null
+    public _snackBar: MatSnackBar = null
     public _toast: ToastrService = null
     public _permissions: object = null
     public _uploading: boolean = null
@@ -80,6 +82,11 @@ export abstract class DefaultComponent {
         if (!this._toast) console.warn("Verifique a instanciação do atributo '_toast'")
 
         return this._toast
+    }
+
+    get snackBar(): MatSnackBar {
+        if (!this._snackBar) console.warn("Verifique a instanciação do atributo '_snackBar'")
+        return this._snackBar
     }
 
 
@@ -226,6 +233,11 @@ export abstract class DefaultComponent {
     }
 
 
+    showSnackBar(message: string) {
+        this.snackBar.open(message, 'Fechar', {duration: 5000});
+      }
+
+
     hideLoading(): void {
         console.debug("hideLoading")
         if (!this.loading) return
@@ -295,8 +307,24 @@ export abstract class DefaultComponent {
 
     }
 
+
     removeNotNumbers(value:String) {
         return value.replace(/[^0-9]/g, "")
+    }
+
+
+    copyToClipboard(val: string){
+        const selBox = document.createElement('textarea');
+        selBox.style.position = 'fixed';
+        selBox.style.left = '0';
+        selBox.style.top = '0';
+        selBox.style.opacity = '0';
+        selBox.value = val;
+        document.body.appendChild(selBox);
+        selBox.focus();
+        selBox.select();
+        document.execCommand('copy');
+        document.body.removeChild(selBox);
     }
 
 
@@ -514,6 +542,22 @@ export abstract class DefaultComponent {
 
         this.read(service, apiView)
 
+    }
+
+
+    async _delete(id, apiView: string) {
+        console.debug("aqui")
+        this.showLoading()
+
+        try {
+            await this._service.setModule(`${apiView}/${id}/`).delete().process_request(true, true, "Dados Deletados!")
+
+        } catch (error) {
+            console.error(error)
+        }
+        finally {
+            this.hideLoading()
+        }
     }
 
 

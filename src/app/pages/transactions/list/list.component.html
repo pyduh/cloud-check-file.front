@@ -47,7 +47,7 @@
                 <ng-container matColumnDef="id">
                     <th class="text-center" mat-header-cell *matHeaderCellDef></th>
                     <td class="text-center" mat-cell *matCellDef="let element">
-                        <button mat-button color="primary" (click)="showHash(element.upload_object.hash)">
+                        <button mat-button color="primary" (click)="showSnackBar(element.upload_object.hash)">
                             <span class="material-icons">
                                 fingerprint
                             </span>
@@ -59,7 +59,7 @@
                 <ng-container matColumnDef="hash">
                     <th class="text-center" mat-header-cell *matHeaderCellDef></th>
                     <td class="text-center" mat-cell *matCellDef="let element">
-                        <button mat-button color="acent" (click)="showHash(element.id)">
+                        <button mat-button color="acent" (click)="showSnackBar(element.id)">
                             <span class="material-icons">
                                 verified_user
                             </span>

@@ -38,7 +38,7 @@ export class ListComponent extends DefaultComponent implements OnInit {
     public _toast: ToastrService,
     public _storage: StorageService,
     public _dialog: MatDialog,
-    private _snackBar: MatSnackBar) {
+    public _snackBar: MatSnackBar) {
 
     super();
   }
@@ -47,11 +47,7 @@ export class ListComponent extends DefaultComponent implements OnInit {
     this.listInitData()
   }
 
-
-  showHash(message: string) {
-    this._snackBar.open(message, 'Fechar', {duration: 5000});
-  }
-  
+ 
   openChecks(data:Array<any>) {
     this._checks = data
     this.openDialog(this._dialog, this.checksTemplate)

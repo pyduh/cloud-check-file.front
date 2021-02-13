@@ -2,12 +2,15 @@ runtime: python27
 api_version: 1
 threadsafe: true
 service: front
+
 handlers:
-- url: /
-  static_files: dist/cloud-file-check/index.html
-  upload: dist/cloud-file-check/index.html
-- url: /
-  static_dir: dist/cloud-file-check
+  - url: /(.*\.(js|map|css|png))$
+    static_files: dist/cloud-file-check/\1
+    upload: dist/cloud-file-check/.*\.(js|map|css|png)$
+
+  - url: .*
+    static_files: dist/cloud-file-check/index.html
+    upload: dist/cloud-file-check/index.html
 
 skip_files:
   - e2e/

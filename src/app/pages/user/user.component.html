@@ -42,9 +42,96 @@
                         </p>
                     </div>
                     <div class="col-12">
+                        <p *ngFor="let _phone of _object.phones">
+                            <mat-form-field appearance="legacy" class="w-100">
+                                <mat-label>Telefone</mat-label>
+                                <input [(ngModel)]="_phone.value" matInput type="text"
+                                    placeholder="Entre com telefone">
+                                <mat-icon matSuffix>add_ic_call</mat-icon>
+                                <mat-hint>Telefone para contato</mat-hint>
+                            </mat-form-field>
+                        </p>
+                    </div>
+                    <div class="col-12">
                         <button mat-raised-button class="w-100" color="accent" (click)="saveUser()"
                             [disabled]="!((_object.username && _object.first_name && _object.last_name))">Redefinir
                             Dados Pessoais</button>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </div>
+    </div>
+
+    <div class="col-12" *ngIf="!_isInvited">
+        <div class="p-10">
+            <mat-expansion-panel class="mat-elevation-z1">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Convites
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table mat-table [dataSource]="_object.invites" class="w-100">
+                
+                                <ng-container matColumnDef="icon">
+                                    <th mat-header-cell *matHeaderCellDef></th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <span class="material-icons">
+                                            alternate_email
+                                        </span>
+                                    </td>
+                                </ng-container>
+                
+                                <ng-container matColumnDef="user">
+                                    <th mat-header-cell *matHeaderCellDef> Usuário </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <p>{{element.user ? element.user.username : 'Convite sem Usuário'}}</p>
+                                        <p>{{element.user ? element.user.first_name + ' ' + element.user.last_name : ''}}</p>
+                                    </td>
+                                </ng-container>
+                
+                                <ng-container matColumnDef="created_at">
+                                    <th mat-header-cell *matHeaderCellDef> Data de Criação </th>
+                                    <td mat-cell *matCellDef="let element">{{element.created_at | date:'dd/MM/yyyy HH:mm'}}</td>
+                                </ng-container>
+                 
+                                <ng-container matColumnDef="code">
+                                    <th class="text-center" mat-header-cell *matHeaderCellDef></th>
+                                    <td class="text-center" mat-cell *matCellDef="let element">
+                                        <button [disabled]="element.user" mat-button color="acent" (click)="generateLink(element)">Copiar Link</button>
+                                    </td>
+                                </ng-container>
+                
+                                <ng-container matColumnDef="actions">
+                                    <th class="text-center" mat-header-cell *matHeaderCellDef> </th>
+                                    <td class="text-center" mat-cell *matCellDef="let element">
+                                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                                            <mat-icon>more_vert</mat-icon>
+                                        </button>
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item *ngIf="element.user">
+                                                <mat-icon>edit</mat-icon>
+                                                Redefinir Senha
+                                            </button>
+                                            <button mat-menu-item (click)="deleteInvite(element)">
+                                                <mat-icon>clear</mat-icon>
+                                                {{element.user ? 'Apagar Usuário' : 'Apagar Convite'}}
+                                            </button>
+                                        </mat-menu>
+                                    </td>
+                                </ng-container>
+                
+                                <tr mat-header-row *matHeaderRowDef="_displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: _displayedColumns;"></tr>
+                            </table>
+                            <mat-paginator (page)="changeTablePage($event)" [length]="_total" [pageSize]="_data.length">
+                            </mat-paginator>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button mat-raised-button class="w-100" color="accent" (click)="createInvite()">Criar novo convite</button>
                     </div>
                 </div>
             </mat-expansion-panel>

@@ -20,15 +20,10 @@ export class LoginComponent extends DefaultComponent implements OnInit {
   _loginArea: boolean = true
   _uploadArea: boolean = false
 
-  _loginForm: boolean = true
-  _recoveryForm: boolean = false
-  _signupForm: boolean = false
-
   _continueConnected: boolean = true
 
   _result: any = null
   _options: Array<any> = []
-  _strongPasswordRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\'!@#\$%\^&\*])(?=.{8,})");
 
 
   constructor(
@@ -48,16 +43,6 @@ export class LoginComponent extends DefaultComponent implements OnInit {
   changeArea() {
     this._loginArea = !this._loginArea
     this._uploadArea = !this._uploadArea
-    console.debug(this.uploadRef.file)
-  }
-
-
-  changeForm(targetForm: string) {
-    this[targetForm] = true
-
-    Object.keys(this).filter(element => element.includes('Form')).filter(element => element != targetForm).forEach(element => this[element] = false)
-
-    this._object = {}
   }
 
 
@@ -72,39 +57,6 @@ export class LoginComponent extends DefaultComponent implements OnInit {
       this.hideLoading()
     }
 
-  }
-
-
-  async recovery() {
-    this.showLoading()
-
-    try {
-      await this._service.post().setModule('auth/forget-password/').setBodyParams(this._object).process_request(true, false, "A nova senha será enviada para o e-mail cadastrado!")
-
-      this.changeForm('_loginForm')
-
-    } catch (error) {
-      console.error(error)
-    }
-    finally {
-      this.hideLoading()
-    }
-  }
-
-
-  async signup() {
-    this.showLoading()
-
-    try {
-      await this._service.post().setModule('auth/signup/').setBodyParams(this._object).process_request()
-      this.changeForm('_loginForm')
-
-    } catch (error) {
-      console.error(error)
-    }
-    finally {
-      this.hideLoading()
-    }
   }
 
 
@@ -135,17 +87,6 @@ export class LoginComponent extends DefaultComponent implements OnInit {
 
   showResult(requestBody) {
     this._result = requestBody
-  }
-
-
-  isStrongPassword() {
-    let isStrong = true
-
-    if (this._object.password && !this._object.password.length) isStrong = false
-
-    if (!this._strongPasswordRegex.test(this._object.password)) isStrong = false
-
-    return isStrong
   }
 
 

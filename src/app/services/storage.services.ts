@@ -72,6 +72,13 @@ export class StorageService {
   }
 
 
+  public isInvited(): boolean {
+    let token = this.openJwtPayload();
+    
+    return token['invite']
+  }
+
+
   public isDomain(): boolean {
     let token = this.openJwtPayload()
     return token['school']['super'] === null
