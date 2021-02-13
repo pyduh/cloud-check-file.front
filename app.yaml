@@ -4,13 +4,17 @@ threadsafe: true
 service: front
 
 handlers:
-  - url: /(.*\.(js|map|css|png))$
-    static_files: dist/cloud-file-check/\1
-    upload: dist/cloud-file-check/.*\.(js|map|css|png)$
+- url: /(.*\.(gif|png|jpg|css|js|eot|ttf|woff|woff2)(|\.map))$
+  static_files: dist/cloud-file-check/\1
+  upload: dist/cloud-file-check/(.*)(|\.map)
 
-  - url: .*
-    static_files: dist/cloud-file-check/index.html
-    upload: dist/cloud-file-check/index.html
+- url: /
+  static_files: dist/cloud-file-check/index.html
+  upload: dist/cloud-file-check/index.html
+
+- url: /(.*)
+  static_files: dist/cloud-file-check/index.html
+  upload: dist/cloud-file-check/index.html
 
 skip_files:
   - e2e/
