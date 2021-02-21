@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { environment as config } from '../../../environments/environment';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -30,7 +31,9 @@ export class LoginComponent extends DefaultComponent implements OnInit {
     public _router: Router,
     public _location: Location,
     public _service: DomainServices,
-    public _storage: StorageService) {
+    public _storage: StorageService,
+    public _toast: ToastrService,
+    ) {
     super();
 
     this._storage.removeLocalStorage()
@@ -61,6 +64,11 @@ export class LoginComponent extends DefaultComponent implements OnInit {
 
 
   verify() {
+    // Verify if this._object.id is a number
+    if (isNaN(this._object.id)) {
+      this.showToast('Verifique o campo "código". Ele deve ser um numeral válido.', 'warning')
+      return
+    }
     const formData: FormData = new FormData();
     formData.append('file', this.uploadRef.file, this.uploadRef.file.name);
     formData.append('id', this._object.id);
@@ -80,6 +88,7 @@ export class LoginComponent extends DefaultComponent implements OnInit {
       (err) => {
         console.error(err)
         this.uploadRef.progress = 0
+        this.showToast('Ocorreu um erro durante o upload. Contate o administrador do sistema.', 'error')
       }
     )
   }

@@ -1,22 +1,27 @@
-<div class="row">
-   <div class="col-12">
-      <div class="float-md-right float-sm-center">
-         <div class="p-30">
-            <button mat-button color="primary" (click)="changeArea()">
-               <h6 class="text-center">
-                  {{this._loginArea ? 'Verificar arquivo': 'Fazer Login'}}</h6>
-            </button>
+<div class="main">
+   <div class="container wrapper">
+      <div class="row align-items-center h-100">
+         <div class="col-md-6 col-sm-10 mx-auto">
+            <div class="row mb-32">
+               <div class="col-12">
+                  <div class="float-right">
+                     <button mat-button color="primary" (click)="changeArea()">
+                        {{this._loginArea ? 'Verificar arquivo': 'Voltar para Login'}}
+                     </button>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-12">
+                  <div [hidden]="_uploadArea">
+                     <ng-container *ngTemplateOutlet="loginArea"></ng-container>
+                  </div>
+                  <div [hidden]="_loginArea">
+                     <ng-container *ngTemplateOutlet="uploadArea"></ng-container>
+                  </div>
+               </div>
+            </div>
          </div>
-      </div>
-   </div>
-</div>
-<div class="row">
-   <div class="col-12">
-      <div [hidden]="_uploadArea">
-         <ng-container *ngTemplateOutlet="loginArea"></ng-container>
-      </div>
-      <div [hidden]="_loginArea">
-         <ng-container *ngTemplateOutlet="uploadArea"></ng-container>
       </div>
    </div>
 </div>
@@ -82,6 +87,11 @@
 <ng-template #uploadArea>
    <div class="row">
       <div class="col-12 p-10">
+         <div class="text-center">
+            <h3>Verificar Arquivo</h3>
+         </div>
+      </div>
+      <div class="col-12 p-10">
          <p>
             <mat-form-field appearance="legacy" class="w-100">
                <mat-label>Código</mat-label>
@@ -110,3 +120,5 @@
       </div>
    </div>
 </ng-template>
+
+<ngx-spinner></ngx-spinner>

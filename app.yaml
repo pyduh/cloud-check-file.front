@@ -4,17 +4,23 @@ threadsafe: true
 service: front
 
 handlers:
-- url: /(.*\.(gif|png|jpg|css|js|eot|ttf|woff|woff2)(|\.map))$
-  static_files: dist/cloud-file-check/\1
-  upload: dist/cloud-file-check/(.*)(|\.map)
-
 - url: /
+  secure: always
   static_files: dist/cloud-file-check/index.html
   upload: dist/cloud-file-check/index.html
 
+#  Routing rules for resources, css, js, images etc. Any file with format filename.ext
+- url: /(.*\.(.+))$
+  secure: always
+  static_files: dist/cloud-file-check/\1
+  upload: dist/cloud-file-check/(.*\.(.+))$
+
+#  Routing rule for Angular Routing
 - url: /(.*)
+  secure: always
   static_files: dist/cloud-file-check/index.html
   upload: dist/cloud-file-check/index.html
+ 
 
 skip_files:
   - e2e/

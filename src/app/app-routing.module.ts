@@ -11,7 +11,6 @@ import { UserComponent } from './pages/user/user.component'
 
 import { ListComponent as TransactionList } from './pages/transactions/list/list.component'
 import { AddComponent as TransactionAdd } from './pages/transactions/add/add.component'
-import { FullPublicComponent } from './pages/full-public/full-public.component'
 import { SignupComponent } from './pages/signup/signup.component'
 
 
@@ -24,19 +23,11 @@ const childrenFullComponent = [
   { path: 'transactions/edit/:id',    component: TransactionAdd },
 ]
 
-const childrenPublicComponent = [
+const routes: Routes = [
+  { path: 'not-found', component: NotFoundComponent },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'signup/:id', component: SignupComponent },
-]
-
-
-const routes: Routes = [
-  { path: 'not-found', component: NotFoundComponent },
-  {
-    path: '', component: FullPublicComponent,
-    children: childrenPublicComponent
-  },
   {
     path: '', component: FullComponent,
     canActivate: [AuthGuardService],
