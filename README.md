@@ -9,7 +9,7 @@ Esse projeto consiste em uma implementação de um cliente em Angular, que terá
 
 Há três formas de utilizar essa aplicação: executando o `docker-compose` presente no [projeto servidor](https://github.com/pyduh/cloud-check-file.back) (instruções no README desse projeto), utilizando o [Docker](https://docs.docker.com/) ou instalando manualmente as dependências e iniciando o serviço.
 
-Como o primeiro mecanismo está especificado no README do projeto servidor, farei a descrição dos últimos dois métodos.
+Como o primeiro mecanismo está especificado no projeto servidor, farei a descrição dos últimos dois métodos.
 
 
 ### Docker
